@@ -1,0 +1,7 @@
+-Resumen:
+Vimos los temas de SCM y realizamos tp4
+
+-Trabajado:
+Creamos repo, decidimos estructura y SCM
+
+-A realizar:
