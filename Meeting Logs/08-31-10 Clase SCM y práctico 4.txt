@@ -5,3 +5,4 @@ Vimos los temas de SCM y realizamos tp4
 Creamos repo, decidimos estructura y SCM
 
 -A realizar:
+Terminar y subir documento a la UV
