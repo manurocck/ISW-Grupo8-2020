@@ -104,7 +104,7 @@ main {
 	height: 45px;
 	line-height: 45px;
 	width: 30%;
-	background: #000;
+	background: rgb(76, 134, 243);
 	color: #fff;
 	font-weight: bold;
 	border: none;
@@ -152,7 +152,6 @@ main {
 	.formulario {
 		grid-template-columns: 1fr;
 	}
-
 	.formulario__grupo-terminos, 
 	.formulario__mensaje,
 	.formulario__grupo-btn-enviar {

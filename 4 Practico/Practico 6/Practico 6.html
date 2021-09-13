@@ -10,12 +10,12 @@
         window.onload = function () {
             // Variables
             const baseDeDatos = [
-                    {id: 1,nombre: 'Patata',precio: 1,imagen: 'imagenes/patatas.jpg'},
-                    {id: 2,nombre: 'Cebolla',precio: 1.2, imagen: 'imagenes/cebolla.jpg'},
-                    {id: 3,nombre: 'Calabacin',precio: 2.1,imagen: 'imagenes/calabacin.jpg'},
-                    {id: 4,nombre: 'Fresas',precio: 0.6,imagen: 'imagenes/fresas.jpg'},
-                    {id: 5,nombre: 'Zapallo',precio: 5.5,imagen: 'imagenes/zapallo.jpg'},
-                    {id: 6,nombre: 'Bananas',precio: 2.0,imagen: 'imagenes/bananas.jpg'}
+                    {id: 1,nombre: 'Patata',precio: 1,imagen:       'imagenes/patatas.jpg'},
+                    {id: 2,nombre: 'Cebolla',precio: 1.2, imagen:   'imagenes/cebolla.jpg'},
+                    {id: 3,nombre: 'Calabacin',precio: 2.1,imagen:  'imagenes/calabacin.jpg'},
+                    {id: 4,nombre: 'Fresas',precio: 0.6,imagen:     'imagenes/fresas.jpg'},
+                    {id: 5,nombre: 'Zapallo',precio: 5.5,imagen:    'imagenes/zapallo.jpg'},
+                    {id: 6,nombre: 'Bananas',precio: 2.0,imagen:    'imagenes/bananas.jpg'}
             ];
 
             let carrito = [];
@@ -152,7 +152,7 @@
     <style type="text/css" >     
 
         #container{
-            display: none;        
+            display: block;        
         }
 		#containerPago{
 			display: none;
@@ -167,7 +167,27 @@
     </style>
 </head>
 <body>
-    <main class="form-container" >
+    <main class="form-container" > 
+        <!--CARRITO DE COMPRAS-->    
+        <div id="container">
+            <div class="row">
+                <!-- Elementos generados a partir del JSON -->
+                <main id="items" class="col-sm-8 row"></main>
+                <!-- Carrito -->
+                <aside class="col-sm-4">
+                    <h2>Carrito</h2>
+                    <!-- Elementos del carrito -->
+                    <ul id="carrito" class="list-group"></ul>
+                    <hr>
+                    <!-- Precio total -->
+                    <p class="text-right">Total: <span id="total"></span>$</p>
+                    <button id="boton-vaciar"    class="btn btn-danger" >Cancelar</button> <!-- onclick="ocultarProductos();"-->
+                    <button id="boton-Confirmar" onclick="TomarProductos()" class="btn btn-danger" >Confirmar</button> <!--onclick="mostrarPago();" -->
+
+                </aside>
+            </div>
+        </div>
+        <!--FORMULARIO DE ENVIO-->
         <form action="" class="formulario" id="formulario">
 			<!-- Grupo: Nombre -->
 			<div class="formulario__grupo" id="grupo__calle">
@@ -192,10 +212,11 @@
                 <label for="ciudad" class="formulario__label">Ciudad</label>
                 <div class="formulario__grupo-input">
                     <select class="formulario__input" name="ciudad" id="ciudad" placeholder ="ciudad">
-                        <option value="0" selected>Seleccione la Ciudad</option>
+                        <option selected>Seleccione la Ciudad</option>
                         <option value="1">Córdoba</option>
-                        <option value="2">Carlos Paz</option>
-                        <option value="3">Rio Primero</option>
+                        <option value="2">Cosquin</option>
+                        <option value="3">Jesus Maria</option>
+                        <option value="4">Villa Maria</option>
                     </select>
                     <i class="formulario__validacion-estado fas fa-times-circle"></i>
                 </div>
@@ -211,91 +232,15 @@
                 <p class="formulario__input-error">El usuario tiene que ser de 4 a 16 dígitos y solo puede contener numeros, letras y guion bajo.</p>
             </div>
             <p>
-                <button type="button" onclick="formularioValido();" class="btn btn-primary" >Continuar</button>    
-                <button type="button" onclick="volver();" class="btn btn-primary" >Volver</button>
+                <button type="button" onclick="mostrarProductos();" class="btn btn-primary" >Continuar</button>    
+                <button type="button" onclick="mostrarProductos();" class="btn btn-primary" >Volver</button>
             </p>
-        </form>    
-        <div id="container">
-            <div class="row">
-                <!-- Elementos generados a partir del JSON -->
-                <main id="items" class="col-sm-10 row"></main>
-                <!-- Carrito -->
-                <aside class="col-sm-4">
-                    <h2>Carrito</h2>
-                    <!-- Elementos del carrito -->
-                    <ul id="carrito" class="list-group"></ul>
-                    <hr>
-                    <!-- Precio total -->
-                    <p class="text-right">Total: <span id="total"></span>$</p>
-                    <button id="boton-vaciar"    onclick="ocultarProductos();"   class="btn btn-danger" >Cancelar</button>
-                    <button id="boton-Confirmar" onclick="mostrarPago();" class="btn btn-danger">Confirmar</button>
-                </aside>
-            </div>
-        </div>
-		
-		<!-- PAGO EN EFECTIVO O VISA -->
-		
-		<div id="containerPago">
-			<center><h2>ELIJA EL MÉTODO DE PAGO</h2></center>
-			<hr>
-			<div class="row" id="botonesPago">
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button id="boton-EFECTIVO"  class="btn btn-danger" >EFECTIVO</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button id="boton-VISA" onclick="pagoVisa();" class="btn btn-danger">TARJETA VISA</button>
-			</div>
-        </div>
-		
-		<!-- FORMULARIO TARJETA VISA -->
-		
-		<div class="form-container" id="formVisa">
-			<form action="" class="formularioTJ" id="Tarjeta">
-				<!-- Grupo: Tarjeta -->
-				<div class="formulario__grupo" id="grupo_n_tarjeta">
-					<label for="nombre" class="formulario__label">Numero de la Tarjeta</label>
-					<div class="formulario__grupo-input">
-						<input type="text" class="formulario__input" name="tarjeta" id="tarjeta" placeholder="XXXX-XXXX-XXXX-XXXX">
-						<i class="formulario__validacion-estado fas fa-times-circle"></i>
-					</div>
-					<p class="formulario__input-error">El número de la tarjeta no es válido. Debe contener 16 números.</p>
-				</div>
-				<!-- Grupo: Nombre y Apellido -->
-				<div class="formulario__grupo" id="grupo__nombre">
-					<label for="nombre" class="formulario__label">Nombre y Apellido (como aparece en la tarjeta)</label>
-					<div class="formulario__grupo-input">
-						<input type="text" class="formulario__input" name="nombre y apellido" id="nomyap" placeholder="NIELSEN MANUEL">
-						<i class="formulario__validacion-estado fas fa-times-circle"></i>
-					</div>
-					<p class="formulario__input-error">Introduzca su nombre sin comas ni simbolos especiales.</p>
-				</div>
-				<!-- Grupo: Ciudad -->
-				<div class="formulario__grupo" id="grupo__nombre">
-					<label for="nombre" class="formulario__label">Vencimiento</label>
-					<div class="formulario__grupo-input">
-						<input type="text" class="formulario__input" name="vencimiento" id="vencimiento" placeholder="MM/AAAA">
-						<i class="formulario__validacion-estado fas fa-times-circle"></i>
-					</div>
-					<p class="formulario__input-error">Introduzca el mes usando dos dígitos numéricos y el año separado por una barra.</p>
-				</div>
-				<!-- Grupo: Referencia -->
-				<div class="formulario__grupo" id="grupo__nombre">
-					<label for="nombre" class="formulario__label">Código de seguridad</label>
-					<div class="formulario__grupo-input">
-						<input type="text" class="formulario__input" name="cvc" id="cvc" placeholder="XXX">
-						<i class="formulario__validacion-estado fas fa-times-circle"></i>
-					</div>
-					<p class="formulario__input-error">El código de seguridad solo puede contener 3 números sin espacios.</p>
-				</div>
-				<p style="text-align:right">
-					<br><button type="button" onclick="confirmarPago();" class="btn btn-primary" >CONFIRMAR PAGO</button>    
-				</p>
-			</form>    
-		</div>
-
+        </form>        
     </main>
+
     <script src="js/formulario.js"></script>
     <script>
-		function continuar(){
-		
+		function continuar(){		
 			mostrarProductos();
 			//const valido = formularioValido();
 			//No puedo hacer que funcione esto
@@ -303,7 +248,10 @@
 			//	mostrarProductos();
 			//}
 		}
-		
+		function tomarProductos(){
+            //faltaria bloquear el carrito            
+            document.getElementById('formulario').style.display = 'block';
+        }
 		function volver(){
 			ocultarProductos();
             document.getElementById('formVisa').style.display = 'none';
@@ -324,9 +272,6 @@
             document.getElementById('containerPago').style.display = 'none';
             document.getElementById('formVisa').style.display = 'block';
 		}
-		
-		
-		
     </script>
 	<script src="https://kit.fontawesome.com/2c36e9b7b1.js" crossorigin="anonymous"></script>
 </body>
