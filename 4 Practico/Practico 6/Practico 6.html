@@ -211,7 +211,7 @@
                 <p class="formulario__input-error">El usuario tiene que ser de 4 a 16 dígitos y solo puede contener numeros, letras y guion bajo.</p>
             </div>
             <p>
-                <button type="button" onclick="continuar();" class="btn btn-primary" >Continuar</button>    
+                <button type="button" onclick="formularioValido();" class="btn btn-primary" >Continuar</button>    
                 <button type="button" onclick="volver();" class="btn btn-primary" >Volver</button>
             </p>
         </form>    
@@ -228,7 +228,7 @@
                     <!-- Precio total -->
                     <p class="text-right">Total: <span id="total"></span>$</p>
                     <button id="boton-vaciar"    onclick="ocultarProductos();"   class="btn btn-danger" >Cancelar</button>
-                    <button id="boton-Confirmar" onclick="mostrarPago()" class="btn btn-danger">Confirmar</button>
+                    <button id="boton-Confirmar" onclick="mostrarPago();" class="btn btn-danger">Confirmar</button>
                 </aside>
             </div>
         </div>
@@ -292,26 +292,24 @@
 		</div>
 
     </main>
+    <script src="js/formulario.js"></script>
     <script>
 		function continuar(){
 		
-			//mostrarProductos();
-			
+			mostrarProductos();
+			//const valido = formularioValido();
 			//No puedo hacer que funcione esto
-			//if(formularioValido()){
-				//mostrarProductos();
+			//if(true){
+			//	mostrarProductos();
 			//}
-			
 		}
+		
 		function volver(){
 			ocultarProductos();
             document.getElementById('formVisa').style.display = 'none';
             document.getElementById('containerPago').style.display = 'none';
             document.getElementById('formVisa').style.display = 'none';
 		}
-        function mostrarProductos(){
-            document.getElementById('container').style.display = 'block';
-        }
         function ocultarProductos(){
             document.getElementById('container').style.display = 'none';
         }
@@ -330,7 +328,6 @@
 		
 		
     </script>
-    <script src="js/formulario.js"></script>
 	<script src="https://kit.fontawesome.com/2c36e9b7b1.js" crossorigin="anonymous"></script>
 </body>
 </html>

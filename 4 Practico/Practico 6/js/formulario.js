@@ -141,22 +141,32 @@ formulario.addEventListener('submit', (e) => {
 	}
 })
 
+function mostrarProductos(){
+    document.getElementById('container').style.display = 'block';
+}
+
 function formularioValido() {
 
 	let calle = document.getElementById('calle');
 	let numero = document.getElementById('numero');
-	let ciudad = document.getElementById('ciudad');
+	let ciudad = document.getElementById('ciudad').value;
 	
+	
+	//tengo que hacer funcionar esto de abajo
 	let val1 = calle.map( c => expresiones['calle'].includes(c) ).every(c => c===true);
-	let val2 = numero.map( c => expresiones['calle'].includes(c) ).every(c => c===true);
-	let val3 = ciudad.value || "0"; 
+	let val2 = numero.map( c => expresiones['numero'].includes(c) ).every(c => c===true);
+	let val3 = ["1","2","3"].includes(ciudad); 
 	
-	if( val1 && val2 && val3)
+	
+	//lo que sigue funciona
+	var confirmacion = [val1,val2,val3].every( c => c===true);
+	
+	if( confirmacion )
 	{
-		return true;
+		mostrarProductos();
+		return;
 	}
 	
-	return false;
-
+	return;
 };
 
