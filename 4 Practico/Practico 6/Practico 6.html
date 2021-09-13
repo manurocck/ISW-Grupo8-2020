@@ -154,6 +154,10 @@
         #container{
             display: none;        
         }
+		#container2{
+			display: none;
+		}
+		
     </style>
 </head>
 <body>
@@ -203,7 +207,7 @@
             </div>
             <p>
                 <button type="button" onclick="mostrarProductos();" class="btn btn-primary" >Continuar</button>    
-                <button type="button" onclick="mostrarProductos();" class="btn btn-primary" >Volver</button>
+                <button type="button" onclick="ocultarProductos();" class="btn btn-primary" >Volver</button>
             </p>
         </form>    
         <div id="container">
@@ -219,10 +223,25 @@
                     <!-- Precio total -->
                     <p class="text-right">Total: <span id="total"></span>$</p>
                     <button id="boton-vaciar"    onclick="ocultarProductos();"   class="btn btn-danger" >Cancelar</button>
-                    <button id="boton-Confirmar" class="btn btn-danger">Confirmar</button>
+                    <button id="boton-Confirmar" onclick="mostrarPago()" class="btn btn-danger">Confirmar</button>
                 </aside>
             </div>
         </div>
+		
+		<!-- PAGO EN EFECTIVO O VISA -->
+		
+		
+		
+		<div id="container2">
+			<h2>ELIJA EL MÉTODO DE PAGO</h2>
+			<hr>
+			<div class="row">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button id="boton-EFECTIVO"  class="btn btn-danger" >EFECTIVO</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button id="boton-VISA" class="btn btn-danger">TARJETA VISA</button>
+			</div>
+        </div>
+		
 
     </main>
     <script>
@@ -232,9 +251,11 @@
         function ocultarProductos(){
             document.getElementById('container').style.display = 'none';
         }
-        function ocultarProductos(){
-            document.getElementById('container').style.display = 'none';
+        function mostrarPago(){
+			ocultarProductos();
+            document.getElementById('container2').style.display = 'block';
         }
+		
     </script>
     <script src="js/formulario.js"></script>
 	<script src="https://kit.fontawesome.com/2c36e9b7b1.js" crossorigin="anonymous"></script>
