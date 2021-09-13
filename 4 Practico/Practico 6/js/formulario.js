@@ -97,7 +97,7 @@ const validarCiudad =() =>{
 		campos[indexOf("ciudad")] = true;	
 	}
 }
-const validarPassword2 = () => {
+	/*const validarPassword2 = () => {
 	const inputPassword1 = document.getElementById('password');
 	const inputPassword2 = document.getElementById('password2');
 	if(inputPassword1.value !== inputPassword2.value)
@@ -118,7 +118,7 @@ const validarPassword2 = () => {
 		document.querySelector(`#grupo__password2 .formulario__input-error`).classList.remove('formulario__input-error-activo');
 		campos['password'] = true;
 	}
-}
+} */
 
 inputs.forEach((input) => {
 	input.addEventListener('keyup', validarFormulario);
