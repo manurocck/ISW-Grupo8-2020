@@ -212,7 +212,7 @@
                 <p class="formulario__input-error">El usuario tiene que ser de 4 a 16 dígitos y solo puede contener numeros, letras y guion bajo.</p>
             </div>
             <p>
-                <button type="button" onclick="mostrarProductos();" class="btn btn-primary" >Continuar</button>    
+                <button type="button" onclick="continuar();" class="btn btn-primary" >Continuar</button>    
                 <button type="button" onclick="volver();" class="btn btn-primary" >Volver</button>
             </p>
         </form>    
@@ -294,6 +294,11 @@
 
     </main>
     <script>
+		function continuar(){
+			if(formularioAceptado){
+				mostrarProductos();
+			}
+		}
 		function volver(){
 			ocultarProductos();
             document.getElementById('formVisa').style.display = 'none';

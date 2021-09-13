@@ -13,43 +13,43 @@ const expresiones = {
 }
 
 const campos = {
-	usuario: false,
-	nombre: false,
+	//usuario: false,
+	//nombre: false,
 	calle: false,
 	numero: false,
 	ciudad:false,
-	password: false,
-	correo: false,	
-	telefono: false
+	//password: false,
+	//correo: false,	
+	//telefono: false
 }
 
 const validarFormulario = (e) => {
 	switch (e.target.name) {
-		case "usuario":
-			validarCampo(expresiones.usuario, e.target, 'usuario');
-		break;
-		case "nombre":
-			validarCampo(expresiones.nombre, e.target, 'nombre');
-		break;
+		//case "usuario":
+		//	validarCampo(expresiones.usuario, e.target, 'usuario');
+		//break;
+		//case "nombre":
+		//	validarCampo(expresiones.nombre, e.target, 'nombre');
+		//break;
 		case "calle":
 			validarCampo(expresiones.calle, e.target, 'calle');
 		break;
 		case "numero":
 			validarCampo(expresiones.numero, e.target, 'numero');
 		break;				
-		case "password":
-			validarCampo(expresiones.password, e.target, 'password');
-			validarPassword2();
-		break;
-		case "password2":
-			validarPassword2();
-		break;
-		case "correo":
-			validarCampo(expresiones.correo, e.target, 'correo');
-		break;
-		case "telefono":
-			validarCampo(expresiones.telefono, e.target, 'telefono');
-		break;
+		//case "password":
+		//	validarCampo(expresiones.password, e.target, 'password');
+		//	validarPassword2();
+		//break;
+		//case "password2":
+		//	validarPassword2();
+		//break;
+		//case "correo":
+		//	validarCampo(expresiones.correo, e.target, 'correo');
+		//break;
+		//case "telefono":
+		//	validarCampo(expresiones.telefono, e.target, 'telefono');
+		//break;
 		case "ciudad":
 			validarCiudad();
 		break;
@@ -138,3 +138,5 @@ formulario.addEventListener('submit', (e) => {
 		document.getElementById('formulario__mensaje').classList.add('formulario__mensaje-activo');
 	}
 })
+
+const formularioAceptado = campos.all(c);
