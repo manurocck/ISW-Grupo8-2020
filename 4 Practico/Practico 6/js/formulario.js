@@ -64,7 +64,6 @@ const validarCampo = (expresion, input, campo) => {
 		document.querySelector(`#grupo__${campo} i`).classList.remove('fa-times-circle');
 		document.querySelector(`#grupo__${campo} .formulario__input-error`).classList.remove('formulario__input-error-activo');
 		campos[indexOf(campo)] = true;
-		document.innerHTML=campos[indexOf(campo)];
 	} else {
 		document.getElementById(`grupo__${campo}`).classList.add('formulario__grupo-incorrecto');
 		document.getElementById(`grupo__${campo}`).classList.remove('formulario__grupo-correcto');
@@ -72,13 +71,12 @@ const validarCampo = (expresion, input, campo) => {
 		document.querySelector(`#grupo__${campo} i`).classList.remove('fa-check-circle');
 		document.querySelector(`#grupo__${campo} .formulario__input-error`).classList.add('formulario__input-error-activo');
 		campos[indexOf(campo)] = false;
-		document.innerHTML=campos[indexOf(campo)];
 	}
 }
 const validarCiudad =() =>{
 	const indice = document.getElementById("ciudad").selectedIndex;
 	
-	if( indice.value == null || indice.value == 0 ) 
+	if( indice.value == null || indice.value == "0" ) 
 	{
 		document.getElementById(`grupo__ciudad`).classList.add('formulario__grupo-incorrecto');
 		document.getElementById(`grupo__ciudad`).classList.remove('formulario__grupo-correcto');
@@ -143,13 +141,22 @@ formulario.addEventListener('submit', (e) => {
 	}
 })
 
+function formularioValido() {
 
-function formularioAceptado() { return campos.every(aceptado)};
-
-function aceptado(campo){
-	if(campo==true){
+	let calle = document.getElementById('calle');
+	let numero = document.getElementById('numero');
+	let ciudad = document.getElementById('ciudad');
+	
+	let val1 = calle.map( c => expresiones['calle'].includes(c) ).every(c => c===true);
+	let val2 = numero.map( c => expresiones['calle'].includes(c) ).every(c => c===true);
+	let val3 = ciudad.value || "0"; 
+	
+	if( val1 && val2 && val3)
+	{
 		return true;
-	}else{
-		return false;
 	}
-}
+	
+	return false;
+
+};
+
