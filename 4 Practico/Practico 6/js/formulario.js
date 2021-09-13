@@ -17,7 +17,7 @@ const campos = {
 	//nombre: false,
 	calle: false,
 	numero: false,
-	ciudad:false,
+	ciudad: false,
 	//password: false,
 	//correo: false,	
 	//telefono: false
@@ -63,18 +63,21 @@ const validarCampo = (expresion, input, campo) => {
 		document.querySelector(`#grupo__${campo} i`).classList.add('fa-check-circle');
 		document.querySelector(`#grupo__${campo} i`).classList.remove('fa-times-circle');
 		document.querySelector(`#grupo__${campo} .formulario__input-error`).classList.remove('formulario__input-error-activo');
-		campos[campo] = true;
+		campos[indexOf(campo)] = true;
+		document.innerHTML=campos[indexOf(campo)];
 	} else {
 		document.getElementById(`grupo__${campo}`).classList.add('formulario__grupo-incorrecto');
 		document.getElementById(`grupo__${campo}`).classList.remove('formulario__grupo-correcto');
 		document.querySelector(`#grupo__${campo} i`).classList.add('fa-times-circle');
 		document.querySelector(`#grupo__${campo} i`).classList.remove('fa-check-circle');
 		document.querySelector(`#grupo__${campo} .formulario__input-error`).classList.add('formulario__input-error-activo');
-		campos[campo] = false;
+		campos[indexOf(campo)] = false;
+		document.innerHTML=campos[indexOf(campo)];
 	}
 }
 const validarCiudad =() =>{
 	const indice = document.getElementById("ciudad").selectedIndex;
+	
 	if( indice.value == null || indice.value == 0 ) 
 	{
 		document.getElementById(`grupo__ciudad`).classList.add('formulario__grupo-incorrecto');
@@ -82,7 +85,7 @@ const validarCiudad =() =>{
 		document.querySelector(`#grupo__ciudad i`).classList.add('fa-times-circle');
 		document.querySelector(`#grupo__ciudad i`).classList.remove('fa-check-circle');
 		document.querySelector(`#grupo__ciudad .formulario__input-error`).classList.add('formulario__input-error-activo');		
-		campos[campo] = false;
+		campos[indexOf("ciudad")] = false;
 	}
 	else
 	{
@@ -91,7 +94,7 @@ const validarCiudad =() =>{
 		document.querySelector(`#grupo__ciudad i`).classList.add('fa-check-circle');
 		document.querySelector(`#grupo__ciudad i`).classList.remove('fa-times-circle');
 		document.querySelector(`#grupo__ciudad .formulario__input-error`).classList.remove('formulario__input-error-activo');		
-		campos[campo] = true;	
+		campos[indexOf("ciudad")] = true;	
 	}
 }
 const validarPassword2 = () => {
@@ -105,6 +108,7 @@ const validarPassword2 = () => {
 		document.querySelector(`#grupo__password2 i`).classList.remove('fa-check-circle');
 		document.querySelector(`#grupo__password2 .formulario__input-error`).classList.add('formulario__input-error-activo');
 		campos['password'] = false;
+		
 	} else 
 	{
 		document.getElementById(`grupo__password2`).classList.remove('formulario__grupo-incorrecto');
@@ -127,7 +131,7 @@ inputs.forEach((input) => {
 formulario.addEventListener('submit', (e) => {
 	e.preventDefault();
 	const terminos = document.getElementById('terminos');
-	if(campos.usuario && campos.nombre && campos.calle && campos.numero && campos.password && campos.correo && campos.telefono && terminos.checked ){
+	if(campos.calle && campos.numero && terminos.checked ){
 		formulario.reset();
 		document.getElementById('formulario__mensaje-exito').classList.add('formulario__mensaje-exito-activo');
 		setTimeout(() => {document.getElementById('formulario__mensaje-exito').classList.remove('formulario__mensaje-exito-activo');}, 5000);
@@ -139,4 +143,13 @@ formulario.addEventListener('submit', (e) => {
 	}
 })
 
-const formularioAceptado = campos.all(c);
+
+function formularioAceptado() { return campos.every(aceptado)};
+
+function aceptado(campo){
+	if(campo==true){
+		return true;
+	}else{
+		return false;
+	}
+}
