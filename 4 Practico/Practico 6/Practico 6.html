@@ -218,7 +218,7 @@
 				<p><i class="fas fa-exclamation-triangle"></i> <b>Error:</b> Por favor rellena el formulario correctamente. </p>
 			</div>
             <div class="formulario__grupo formulario__grupo-btn-enviar"></div>
-                <button type="button" onclick="validar();" class="formulario__btn" >Continuar</button>    
+                <button type="button" onclick="continuar();" class="formulario__btn" >Continuar</button>    
                 <button type="button"  onclick="volver();" class="btn btn-primary" >Volver</button>
             </div>
         </form>    
@@ -318,26 +318,44 @@
     </main>
     <script src="js/formulario.js"></script>
     <script>
-        function validar(){
+        function continuar(){	
+			const caracteresCalle = 'abcdefghijklmnñopqrstuvwxyz'.split('').concat('abcdefghijklmnñopqrstuvwxyz'.split('').map((c) => c.toUpperCase())); // Letras y espacios, pueden llevar acentos.
+			const caracteresNumero = '0123456789'.split(''); // numeros, guion medio
+
+			
             var SelectCiudades=document.getElementById('ciudad');
+            var SelectCalle=document.getElementById('calle').value.split('');
+            var SelectNum=document.getElementById('numero').value.split('');
+			
+			var output = SelectCalle.length;
+			console.log(output);
+			
+			
             if(SelectCiudades.value==0 ||
                 SelectCiudades.value=="")
                 {
                     alert("Selecciona una ciudad para continuar");
                     SelectCiudades.focus();
-                }else{
-					mostrarProductos();
+				}else{
+					if(SelectCalle.length == 0 || !SelectCalle.every( letra => caracteresCalle.includes(letra) ))
+					{
+						alert("Ingrese una calle válida");
+						SelectCalle.focus();
+					}
+					else{
+						if(SelectNum.length == 0 || !SelectNum.every( letra => caracteresNumero.includes(letra) ))
+						{
+							alert("Ingrese un numero válido (Planta Baja como 0)");
+							SelectNum.focus();
+						}
+						else
+						{
+							mostrarProductos();
+						}
+					}
 				}
         }
-		function continuar(){
 		
-			mostrarProductos();
-			//const valido = formularioValido();
-			//No puedo hacer que funcione esto
-			//if(true){
-			//	mostrarProductos();
-			//}
-		}
 		
 		function volver(){
 			ocultarProductos();
