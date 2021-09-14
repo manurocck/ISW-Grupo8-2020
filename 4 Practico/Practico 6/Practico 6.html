@@ -210,10 +210,14 @@
                 </div>
                 <p class="formulario__input-error">El usuario tiene que ser de 4 a 16 dígitos y solo puede contener numeros, letras y guion bajo.</p>
             </div>
-            <p>
-                <button type="button" onclick="formularioValido();" class="btn btn-primary" >Continuar</button>    
-                <button type="button" onclick="volver();" class="btn btn-primary" >Volver</button>
-            </p>
+
+            <div class="formulario__mensaje" id="formulario__mensaje">
+				<p><i class="fas fa-exclamation-triangle"></i> <b>Error:</b> Por favor rellena el formulario correctamente. </p>
+			</div>
+            <div class="formulario__grupo formulario__grupo-btn-enviar"></div>
+                <button type="button"  class="formulario__btn" >Continuar</button>    
+                <button type="button"  onclick="volver();" class="btn btn-primary" >Volver</button>
+            </div>
         </form>    
         <div id="container">
             <div class="row">
@@ -292,7 +296,7 @@
 		</div>
 
     </main>
-    <script src="js/formularioManu.js"></script>
+    <script src="js/formulario.js"></script>
     <script>
 		function continuar(){
 		
