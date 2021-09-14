@@ -171,6 +171,7 @@
 </head>
 <body>
     <main class="form-container" >
+		<h1 id="titulo-formulario">Ingrese dirección de envío</h1>
         <form action="" class="formulario" id="formulario">
 			<!-- Grupo: Nombre -->
 			<div class="formulario__grupo" id="grupo__calle">
@@ -221,20 +222,21 @@
                 <button type="button" onclick="continuar();" class="formulario__btn" >Continuar</button>    
                 <button type="button"  onclick="volver();" class="formulario__btn" >Volver</button>
             </div>
-        </form>    
+        </form>
+		<h1 id="titulo-carrito">Seleccione sus productos</h1>
         <div id="container">
             <div class="row">
                 <!-- Elementos generados a partir del JSON -->
-                <main id="items" class="col-sm-10 row"></main>
+                <main id="items" class="col-sm-8 row"></main>
                 <!-- Carrito -->
                 <aside class="col-sm-4">
-                    <h2>Carrito</h2>
+                    <h2 align="right">Carrito</h2>
                     <!-- Elementos del carrito -->
                     <ul id="carrito" class="list-group"></ul>
                     <hr>
                     <!-- Precio total -->
                     <p class="text-right">Total: <span id="total"></span>$</p>
-                    <button id="boton-vaciar"    onclick="ocultarProductos();"   class="btn btn-danger" >Cancelar</button>
+                    <button id="boton-vaciar"    onclick="volver();"   class="btn btn-danger" >Cancelar</button>
                     <button id="boton-Confirmar" onclick="confirmarCarrito();" class="btn btn-danger">Confirmar</button>
                 </aside>
             </div>
@@ -351,7 +353,7 @@
 						else
 						{
 							mostrarProductos();
-							
+							ocultarFormulario();
 						}
 					}
 				}
@@ -384,11 +386,19 @@
 			ocultarProductos();
             document.getElementById('formVisa').style.display = 'none';
             document.getElementById('containerPago').style.display = 'none';
-            document.getElementById('formVisa').style.display = 'none';
+            document.getElementById('Efectivo').style.display = 'none';
+            document.getElementById('formulario').style.display = 'block';
+            document.getElementById('titulo-formulario').style.display = 'block';
 		}
         function ocultarProductos(){
+            document.getElementById('titulo-carrito').style.display = 'none';
             document.getElementById('container').style.display = 'none';
         }
+        function ocultarFormulario(){
+            document.getElementById('titulo-formulario').style.display = 'none';
+            document.getElementById('formulario').style.display = 'none';
+        }
+		
         function confirmarCarrito(){
 			const miTotal = parseFloat(document.getElementById('total').textContent);
 		

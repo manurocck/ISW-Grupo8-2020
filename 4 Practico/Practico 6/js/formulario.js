@@ -2,10 +2,6 @@ const formulario = document.getElementById('formulario');
 const inputs 	 = document.querySelectorAll('#formulario input');
 
 
-const caracteresNombre = /^[a-zA-ZÀ-ÿ\s]{1,40}$/; // Letras y espacios, pueden llevar acentos.		
-const caracteresCalle =  /^[a-zA-ZÀ-ÿ\s]{1,40}$/; // Letras y espacios, pueden llevar acentos.
-const caracteresNumero = /^[Z0-9\-]{1,5}$/; // numeros, guion medio
-
 const expresiones = {
 	usuario: /^[a-zA-Z0-9\_\-]{4,16}$/, // Letras, numeros, guion y guion_bajo
 	nombre: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.		
@@ -147,6 +143,8 @@ formulario.addEventListener('submit', (e) => {
 
 function mostrarProductos(){
     document.getElementById('container').style.display = 'block';
+    document.getElementById('titulo-carrito').style.display = 'block';
+	
 }
 
 function formularioValido() {
