@@ -2,6 +2,10 @@ const formulario = document.getElementById('formulario');
 const inputs 	 = document.querySelectorAll('#formulario input');
 
 
+const caracteresNombre = /^[a-zA-ZÀ-ÿ\s]{1,40}$/; // Letras y espacios, pueden llevar acentos.		
+const caracteresCalle =  /^[a-zA-ZÀ-ÿ\s]{1,40}$/; // Letras y espacios, pueden llevar acentos.
+const caracteresNumero = /^[Z0-9\-]{1,5}$/; // numeros, guion medio
+
 const expresiones = {
 	usuario: /^[a-zA-Z0-9\_\-]{4,16}$/, // Letras, numeros, guion y guion_bajo
 	nombre: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.		
@@ -147,16 +151,20 @@ function mostrarProductos(){
 
 function formularioValido() {
 
-	let calle = document.getElementById('calle');
-	let numero = document.getElementById('numero');
-	let ciudad = document.getElementById('ciudad').value;
+	const calle = document.getElementById('calle').value;
+	const numero = document.getElementById('numero').value;
+	const ciudad = document.getElementById('ciudad').value;
 	
 	
 	//tengo que hacer funcionar esto de abajo
-	let val1 = calle.map( c => expresiones['calle'].includes(c) ).every(c => c===true);
-	let val2 = numero.map( c => expresiones['numero'].includes(c) ).every(c => c===true);
-	let val3 = ["1","2","3"].includes(ciudad); 
+	//var valCalle = calle.map( c => caracteresCalle.includes(c) ).every(c => c===true);
+	//var val2 = numero.map( c => caracteresNumero.includes(c) ).every(c => c===true);
+	//let val3 = ["1","2","3"].includes(ciudad); 
 	
+	
+	var val1 = true;
+	var val2 = true;
+	var val3 = true;
 	
 	//lo que sigue funciona
 	var confirmacion = [val1,val2,val3].every( c => c===true);
