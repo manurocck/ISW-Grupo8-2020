@@ -185,7 +185,7 @@
 			<div class="formulario__grupo" id="grupo__numero">
 				<label for="numero" class="formulario__label">Número</label>
 				<div class="formulario__grupo-input">
-					<input type="text" class="formulario__input" name="numero" id="numero" placeholder="numero">
+					<input type="tel" size="50%" onkeypress="return onlyNumberKey(event)" class="formulario__input" name="numero" id="numero" placeholder="numero">
 					<i class="formulario__validacion-estado fas fa-times-circle"></i>
 				</div>
 				<p class="formulario__input-error">Debe indicar un numero o guion medio.</p>
@@ -235,7 +235,7 @@
                     <!-- Precio total -->
                     <p class="text-right">Total: <span id="total"></span>$</p>
                     <button id="boton-vaciar"    onclick="ocultarProductos();"   class="btn btn-danger" >Cancelar</button>
-                    <button id="boton-Confirmar" onclick="mostrarPago();" class="btn btn-danger">Confirmar</button>
+                    <button id="boton-Confirmar" onclick="confirmarCarrito();" class="btn btn-danger">Confirmar</button>
                 </aside>
             </div>
         </div>
@@ -286,7 +286,7 @@
 				<div class="formulario__grupo" id="grupo__nombre">
 					<label for="nombre" class="formulario__label">Código de seguridad</label>
 					<div class="formulario__grupo-input">
-						<input type="text" class="formulario__input" name="cvc" id="cvc" placeholder="XXX">
+						<input type="tel" size="50%" onkeypress="return onlyNumberKey(event)" class="formulario__input" name="cvc" id="cvc" placeholder="XXX">
 						<i class="formulario__validacion-estado fas fa-times-circle"></i>
 					</div>
 					<p class="formulario__input-error">El código de seguridad solo puede contener 3 números sin espacios.</p>
@@ -304,7 +304,7 @@
                 <div class="formulario__grupo" id="grupo__importe">
                     <label for="importe" class="formulario__label">¿Con cuanto pagas?</label>
                     <div class="formulario__grupo-input">
-                        <input type="text" class="formulario__input" name="importe" id="importe" placeholder="importe">
+                        <input type="text" size="50%" onkeypress="return onlyNumberKey(event)" class="formulario__input" name="importe" id="importe" placeholder="Importe">
                         <i class="formulario__validacion-estado fas fa-times-circle"></i>
                     </div>
                     <p class="formulario__input-error">Debe Ingresar un valor numerico.</p>
@@ -357,6 +357,28 @@
         }
 		
 		
+        function confirmarPago(){
+			const input = document.getElementById('importe');
+			const miTotal = document.getElementById('total');
+			
+			const value = parseInt(input.value);
+            if (value < parseFloat(miTotal.textContent) ) {
+                alert('Tu importe debe ser mayor a ' + parseFloat(miTotal.textContent));
+            }
+			else
+			{
+				alert("Pago Confirmado");
+			}
+		}
+		
+		function onlyNumberKey(evt) { 
+        // Only ASCII character in that range allowed
+			var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+			if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+				return false;
+			return true;
+		}
+		
 		function volver(){
 			ocultarProductos();
             document.getElementById('formVisa').style.display = 'none';
@@ -366,9 +388,16 @@
         function ocultarProductos(){
             document.getElementById('container').style.display = 'none';
         }
-        function mostrarPago(){
-			ocultarProductos();
-            document.getElementById('containerPago').style.display = 'block';
+        function confirmarCarrito(){
+			const miTotal = parseFloat(document.getElementById('total').textContent);
+		
+			if(miTotal > 0){
+				ocultarProductos();
+				document.getElementById('containerPago').style.display = 'block';			
+			}
+			else{
+				alert("Debe agregar al menos un producto al carrito");
+			}
         }
 		function pagoEfectivo(){
             document.getElementById('containerPago').style.display = 'none';
@@ -381,9 +410,6 @@
             document.getElementById('formEfectivo').style.display = 'none';
 		}
 		
-        function confirmarPago(){
-            alert("Pago Confirmado");
-		}
 		
 		
     </script>
