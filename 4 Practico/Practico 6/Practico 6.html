@@ -158,8 +158,11 @@
 			display: none;
 		}
 		#formVisa{
-			display: none;
+			display: none;            
 		}
+		#formEfectivo{
+			display: none;            
+		}        
 		#botonesPago{
 			margin:auto;
 		}
@@ -244,13 +247,12 @@
 			<hr>
 			<div class="row" id="botonesPago">
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button id="boton-EFECTIVO"  class="btn btn-danger" >EFECTIVO</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button id="boton-VISA" onclick="pagoVisa();" class="btn btn-danger">TARJETA VISA</button>
+				<button id="boton-EFECTIVO"  class="btn btn-danger" onclick="pagoEfectivo();" >EFECTIVO</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button id="boton-VISA"      class="btn btn-danger" onclick="pagoVisa();" >TARJETA VISA</button>
 			</div>
         </div>
 		
-		<!-- FORMULARIO TARJETA VISA -->
-		
+		<!-- FORMULARIO TARJETA VISA -->		
 		<div class="form-container" id="formVisa">
 			<form action="" class="formularioTJ" id="Tarjeta">
 				<!-- Grupo: Tarjeta -->
@@ -289,6 +291,24 @@
 					</div>
 					<p class="formulario__input-error">El código de seguridad solo puede contener 3 números sin espacios.</p>
 				</div>
+				<p style="text-align:right">
+					<br><button type="button" onclick="confirmarPago();" class="btn btn-primary" >CONFIRMAR PAGO</button>    
+				</p>
+			</form>    
+		</div>
+
+		<div class="form-container" id="formEfectivo">
+			<form action="" class="formularioEfectivo" id="Efectivo">
+				<!-- Grupo: Tarjeta -->
+                <!-- Grupo: Número -->
+                <div class="formulario__grupo" id="grupo__importe">
+                    <label for="importe" class="formulario__label">¿Con cuanto pagas?</label>
+                    <div class="formulario__grupo-input">
+                        <input type="text" class="formulario__input" name="importe" id="importe" placeholder="importe">
+                        <i class="formulario__validacion-estado fas fa-times-circle"></i>
+                    </div>
+                    <p class="formulario__input-error">Debe Ingresar un valor numerico.</p>
+                </div>    
 				<p style="text-align:right">
 					<br><button type="button" onclick="confirmarPago();" class="btn btn-primary" >CONFIRMAR PAGO</button>    
 				</p>
@@ -334,12 +354,18 @@
         }
 		function pagoEfectivo(){
             document.getElementById('containerPago').style.display = 'none';
+            document.getElementById('formEfectivo').style.display = 'block';
+            document.getElementById('formVisa').style.display = 'none';
 		}
 		function pagoVisa(){
             document.getElementById('containerPago').style.display = 'none';
             document.getElementById('formVisa').style.display = 'block';
+            document.getElementById('formEfectivo').style.display = 'none';
 		}
 		
+        function confirmarPago(){
+            alert("Pago Confirmado");
+		}
 		
 		
     </script>
