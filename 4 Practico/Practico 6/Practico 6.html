@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Practico 6</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/estilos.css">
+    <script>
+        window.onload = function () {
+            // Variables
+            const baseDeDatos = [
+                    {id: 1,nombre: 'Patata',precio: 1,imagen: 'imagenes/patatas.jpg'},
+                    {id: 2,nombre: 'Cebolla',precio: 1.2, imagen: 'imagenes/cebolla.jpg'},
+                    {id: 3,nombre: 'Calabacin',precio: 2.1,imagen: 'imagenes/calabacin.jpg'},
+                    {id: 4,nombre: 'Fresas',precio: 0.6,imagen: 'imagenes/fresas.jpg'},
+                    {id: 5,nombre: 'Zapallo',precio: 5.5,imagen: 'imagenes/zapallo.jpg'},
+                    {id: 6,nombre: 'Bananas',precio: 2.0,imagen: 'imagenes/bananas.jpg'}
+            ];
+
+            let carrito = [];
+            let total = 0;
+            const DOMitems       = document.querySelector('#items');
+            const DOMcarrito     = document.querySelector('#carrito');
+            const DOMtotal       = document.querySelector('#total');
+            const DOMbotonVaciar = document.querySelector('#boton-vaciar');
+            // Funciones
+            /**
+             * Dibuja todos los productos a partir de la base de datos. No confundir con el carrito
+             */
+            function renderizarProductos() {
+                baseDeDatos.forEach((info) => {
+                        // Estructura
+                        const miNodo = document.createElement('div');
+                        miNodo.classList.add('card', 'col-sm-4');
+                        // Body
+                        const miNodoCardBody = document.createElement('div');
+                        miNodoCardBody.classList.add('card-body');
+                        // Titulo
+                        const miNodoTitle = document.createElement('h5');
+                        miNodoTitle.classList.add('card-title');
+                        miNodoTitle.textContent = info.nombre;
+                        // Imagen
+                        const miNodoImagen = document.createElement('img');
+                        miNodoImagen.classList.add('img-fluid');
+                        miNodoImagen.setAttribute('src', info.imagen);
+                        // Precio
+                        const miNodoPrecio = document.createElement('p');
+                        miNodoPrecio.classList.add('card-text');
+                        miNodoPrecio.textContent = info.precio + '$';
+                        // Boton 
+                        const miNodoBoton = document.createElement('button');
+                        miNodoBoton.classList.add('btn', 'btn-primary');
+                        miNodoBoton.textContent = '+';
+                        miNodoBoton.setAttribute('marcador', info.id);
+                        miNodoBoton.addEventListener('click', anyadirProductoAlCarrito);
+                        // Insertamos
+                        miNodoCardBody.appendChild(miNodoImagen);
+                        miNodoCardBody.appendChild(miNodoTitle);
+                        miNodoCardBody.appendChild(miNodoPrecio);
+                        miNodoCardBody.appendChild(miNodoBoton);
+                        miNodo.appendChild(miNodoCardBody);
+                        DOMitems.appendChild(miNodo);
+                });
+            }
+            /**
+            * Evento para añadir un producto al carrito de la compra
+            */
+            function anyadirProductoAlCarrito(evento) {
+                // Anyadimos el Nodo a nuestro carrito
+                carrito.push(evento.target.getAttribute('marcador'))
+                // Calculo el total
+                calcularTotal();
+                // Actualizamos el carrito 
+                renderizarCarrito();
+            }
+
+            /**
+            * Dibuja todos los productos guardados en el carrito
+            */
+            function renderizarCarrito() {
+                // Vaciamos todo el html
+                DOMcarrito.textContent = '';
+                // Quitamos los duplicados
+                const carritoSinDuplicados = [...new Set(carrito)];
+                // Generamos los Nodos a partir de carrito
+                carritoSinDuplicados.forEach((item) => {
+                    // Obtenemos el item que necesitamos de la variable base de datos
+                    const miItem = baseDeDatos.filter((itemBaseDatos) => {return itemBaseDatos.id === parseInt(item);});              // ¿Coincide las id? Solo puede existir un caso
+                    // Cuenta el número de veces que se repite el producto
+                    const numeroUnidadesItem = carrito.reduce((total, itemId) => {return itemId === item ? total += 1 : total;}, 0); // ¿Coincide las id? Incremento el contador, en caso contrario no mantengo
+                    // Creamos el nodo del item del carrito
+                    const miNodo = document.createElement('li');
+                    miNodo.classList.add('list-group-item', 'text-right', 'mx-2');
+                    miNodo.textContent = `${numeroUnidadesItem} x ${miItem[0].nombre} - ${miItem[0].precio}$`;
+                    // Boton de borrar
+                    const miBoton = document.createElement('button');
+                    miBoton.classList.add('btn', 'btn-danger', 'mx-5');
+                    miBoton.textContent = 'X';
+                    miBoton.style.marginLeft = '1rem';
+                    miBoton.dataset.item = item;
+                    miBoton.addEventListener('click', borrarItemCarrito);
+                    // Mezclamos nodos
+                    miNodo.appendChild(miBoton);
+                    DOMcarrito.appendChild(miNodo);
+                });
+            }
+            /**
+            * Evento para borrar un elemento del carrito
+            */
+            function borrarItemCarrito(evento) {
+                // Obtenemos el producto ID que hay en el boton pulsado
+                const id = evento.target.dataset.item;
+                // Borramos todos los productos
+                carrito = carrito.filter((carritoId) => {return carritoId !== id;});
+                // volvemos a renderizar
+                renderizarCarrito();
+                // Calculamos de nuevo el precio
+                calcularTotal();
+            }
+            /**
+             * Calcula el precio total teniendo en cuenta los productos repetidos
+             */
+            function calcularTotal() {
+                // Limpiamos precio anterior
+                total = 0;
+                // Recorremos el array del carrito
+                carrito.forEach((item) => {
+                    // De cada elemento obtenemos su precio
+                    const miItem = baseDeDatos.filter((itemBaseDatos) => {return itemBaseDatos.id === parseInt(item);});
+                    total = total + miItem[0].precio;
+                 });
+                // Renderizamos el precio en el HTML
+                DOMtotal.textContent = total.toFixed(2);
+            }
+            /**
+             * Varia el carrito y vuelve a dibujarlo
+             */
+            function vaciarCarrito() {
+                // Limpiamos los productos guardados
+                carrito = [];
+                // Renderizamos los cambios
+                renderizarCarrito();
+                calcularTotal();
+            }
+            // Eventos
+            DOMbotonVaciar.addEventListener('click', vaciarCarrito);    
+            // Inicio
+            renderizarProductos();
+        }         
+    </script>
+    <style type="text/css" >     
+
+        #container{
+            display: none;        
+        }
+		#containerPago{
+			display: none;
+		}
+		#formVisa{
+			display: none;
+		}
+		#botonesPago{
+			margin:auto;
+		}
+		
+    </style>
+</head>
+<body>
+    <main class="form-container" >
+        <form action="" class="formulario" id="formulario">
+			<!-- Grupo: Nombre -->
+			<div class="formulario__grupo" id="grupo__calle">
+				<label for="calle" class="formulario__label">Calle</label>
+				<div class="formulario__grupo-input">
+					<input type="text" class="formulario__input" name="calle" id="calle" placeholder="calle">
+					<i class="formulario__validacion-estado fas fa-times-circle"></i>
+				</div>
+				<p class="formulario__input-error">Debe indicar la calle.</p>
+			</div>
+            <!-- Grupo: Número -->
+			<div class="formulario__grupo" id="grupo__numero">
+				<label for="numero" class="formulario__label">Número</label>
+				<div class="formulario__grupo-input">
+					<input type="text" class="formulario__input" name="numero" id="numero" placeholder="numero">
+					<i class="formulario__validacion-estado fas fa-times-circle"></i>
+				</div>
+				<p class="formulario__input-error">Debe indicar un numero o guion medio.</p>
+			</div>
+            <!-- Grupo: ciudad -->
+			<div class="formulario__grupo" id="grupo__ciudad">
+                <label for="ciudad" class="formulario__label">Ciudad</label>
+                <div class="formulario__grupo-input">
+                    <select class="formulario__input" name="ciudad" id="ciudad" placeholder ="ciudad" required>
+                        <option value="0" selected>Seleccione la Ciudad</option>
+                        <option value="1">Córdoba</option>
+                        <option value="2">Carlos Paz</option>
+                        <option value="3">Rio Primero</option>
+                    </select>
+                    <i class="formulario__validacion-estado fas fa-times-circle"></i>
+                </div>
+                <p class="formulario__input-error">Seleccione la ciudad.</p>
+			</div>
+            <!-- Grupo: referencia -->
+            <div class="formulario__grupo" id="grupo__referencia">
+                <label for="referencia" class="formulario__label">Referencia</label>
+                <div class="formulario__grupo-input">
+                    <input type="text" class="formulario__input" name="referencia" id="referencia" placeholder="Referencia">
+                    <i class="formulario__validacion-estado fas fa-times-circle"></i>
+                </div>
+                <p class="formulario__input-error">El usuario tiene que ser de 4 a 16 dígitos y solo puede contener numeros, letras y guion bajo.</p>
+            </div>
+
+            <div class="formulario__mensaje" id="formulario__mensaje">
+				<p><i class="fas fa-exclamation-triangle"></i> <b>Error:</b> Por favor rellena el formulario correctamente. </p>
+			</div>
+            <div class="formulario__grupo formulario__grupo-btn-enviar"></div>
+                <button type="button" onclick="validar();" class="formulario__btn" >Continuar</button>    
+                <button type="button"  onclick="volver();" class="btn btn-primary" >Volver</button>
+            </div>
+        </form>    
+        <div id="container">
+            <div class="row">
+                <!-- Elementos generados a partir del JSON -->
+                <main id="items" class="col-sm-10 row"></main>
+                <!-- Carrito -->
+                <aside class="col-sm-4">
+                    <h2>Carrito</h2>
+                    <!-- Elementos del carrito -->
+                    <ul id="carrito" class="list-group"></ul>
+                    <hr>
+                    <!-- Precio total -->
+                    <p class="text-right">Total: <span id="total"></span>$</p>
+                    <button id="boton-vaciar"    onclick="ocultarProductos();"   class="btn btn-danger" >Cancelar</button>
+                    <button id="boton-Confirmar" onclick="mostrarPago();" class="btn btn-danger">Confirmar</button>
+                </aside>
+            </div>
+        </div>
+		
+		<!-- PAGO EN EFECTIVO O VISA -->
+		
+		<div id="containerPago">
+			<center><h2>ELIJA EL MÉTODO DE PAGO</h2></center>
+			<hr>
+			<div class="row" id="botonesPago">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button id="boton-EFECTIVO"  class="btn btn-danger" >EFECTIVO</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button id="boton-VISA" onclick="pagoVisa();" class="btn btn-danger">TARJETA VISA</button>
+			</div>
+        </div>
+		
+		<!-- FORMULARIO TARJETA VISA -->
+		
+		<div class="form-container" id="formVisa">
+			<form action="" class="formularioTJ" id="Tarjeta">
+				<!-- Grupo: Tarjeta -->
+				<div class="formulario__grupo" id="grupo_n_tarjeta">
+					<label for="nombre" class="formulario__label">Numero de la Tarjeta</label>
+					<div class="formulario__grupo-input">
+						<input type="text" class="formulario__input" name="tarjeta" id="tarjeta" placeholder="XXXX-XXXX-XXXX-XXXX">
+						<i class="formulario__validacion-estado fas fa-times-circle"></i>
+					</div>
+					<p class="formulario__input-error">El número de la tarjeta no es válido. Debe contener 16 números.</p>
+				</div>
+				<!-- Grupo: Nombre y Apellido -->
+				<div class="formulario__grupo" id="grupo__nombre">
+					<label for="nombre" class="formulario__label">Nombre y Apellido (como aparece en la tarjeta)</label>
+					<div class="formulario__grupo-input">
+						<input type="text" class="formulario__input" name="nombre y apellido" id="nomyap" placeholder="NIELSEN MANUEL">
+						<i class="formulario__validacion-estado fas fa-times-circle"></i>
+					</div>
+					<p class="formulario__input-error">Introduzca su nombre sin comas ni simbolos especiales.</p>
+				</div>
+				<!-- Grupo: Ciudad -->
+				<div class="formulario__grupo" id="grupo__nombre">
+					<label for="nombre" class="formulario__label">Vencimiento</label>
+					<div class="formulario__grupo-input">
+						<input type="text" class="formulario__input" name="vencimiento" id="vencimiento" placeholder="MM/AAAA">
+						<i class="formulario__validacion-estado fas fa-times-circle"></i>
+					</div>
+					<p class="formulario__input-error">Introduzca el mes usando dos dígitos numéricos y el año separado por una barra.</p>
+				</div>
+				<!-- Grupo: Referencia -->
+				<div class="formulario__grupo" id="grupo__nombre">
+					<label for="nombre" class="formulario__label">Código de seguridad</label>
+					<div class="formulario__grupo-input">
+						<input type="text" class="formulario__input" name="cvc" id="cvc" placeholder="XXX">
+						<i class="formulario__validacion-estado fas fa-times-circle"></i>
+					</div>
+					<p class="formulario__input-error">El código de seguridad solo puede contener 3 números sin espacios.</p>
+				</div>
+				<p style="text-align:right">
+					<br><button type="button" onclick="confirmarPago();" class="btn btn-primary" >CONFIRMAR PAGO</button>    
+				</p>
+			</form>    
+		</div>
+
+    </main>
+    <script src="js/formulario.js"></script>
+    <script>
+        function validar(){
+            var SelectCiudades=document.getElementById('ciudad');
+            if(SelectCiudades.value==0 ||
+                SelectCiudades.value=="")
+                {
+                    alert("Selecciona una ciudad para continuar");
+                    SelectCiudades.focus();
+                }else{
+					mostrarProductos();
+				}
+        }
+		function continuar(){
+		
+			mostrarProductos();
+			//const valido = formularioValido();
+			//No puedo hacer que funcione esto
+			//if(true){
+			//	mostrarProductos();
+			//}
+		}
+		
+		function volver(){
+			ocultarProductos();
+            document.getElementById('formVisa').style.display = 'none';
+            document.getElementById('containerPago').style.display = 'none';
+            document.getElementById('formVisa').style.display = 'none';
+		}
+        function ocultarProductos(){
+            document.getElementById('container').style.display = 'none';
+        }
+        function mostrarPago(){
+			ocultarProductos();
+            document.getElementById('containerPago').style.display = 'block';
+        }
+		function pagoEfectivo(){
+            document.getElementById('containerPago').style.display = 'none';
+		}
+		function pagoVisa(){
+            document.getElementById('containerPago').style.display = 'none';
+            document.getElementById('formVisa').style.display = 'block';
+		}
+		
+		
+		
+    </script>
+	<script src="https://kit.fontawesome.com/2c36e9b7b1.js" crossorigin="anonymous"></script>
+</body>
+</html>
