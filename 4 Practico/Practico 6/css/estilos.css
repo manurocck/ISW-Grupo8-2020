@@ -17,6 +17,9 @@ main {
 #titulo-carrito{
 	display:none;
 }
+#titulo-visa{
+	display:none;
+}
 
 #titulo-entrega{
 	display:none;
@@ -30,6 +33,12 @@ main {
 	display:none;
 }
 #rapido{
+	display:none;
+}
+#boton-programado{
+	display:none;
+}
+#programado{
 	display:none;
 }
 

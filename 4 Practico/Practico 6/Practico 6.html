@@ -254,7 +254,8 @@
 			</div>
         </div>
 		
-		<!-- FORMULARIO TARJETA VISA -->		
+		<!-- FORMULARIO TARJETA VISA -->	
+		<h1 id="titulo-visa">Ingrese datos de su tarjeta VISA</h1>
 		<div class="form-container" id="formVisa">
 			<form action="" class="formularioTJ" id="Tarjeta">
 				<!-- Grupo: Tarjeta -->
@@ -294,7 +295,7 @@
 					<p class="formulario__input-error">El código de seguridad solo puede contener 3 números sin espacios.</p>
 				</div>
 				<p style="text-align:right">
-					<br><button type="button" onclick="confirmarPago();" class="btn btn-primary" >CONFIRMAR PAGO</button>    
+					<br><button type="button" onclick="confirmarPagoVisa();" class="btn btn-primary" >Confirmar pago con tarjeta</button>    
 				</p>
 			</form>    
 		</div>
@@ -326,7 +327,8 @@
                         <option value="1">Fecha y hora de recepción</option>
                     </select>
 					<select class="formulario__input" name="rapido" id="rapido" placeholder ="En cuanto tiempo?" required>
-                        <option value="1" selected>En 1 hora</option>
+                        <option value="0" selected>Seleccione una opción</option>
+                        <option value="1">En 1 hora</option>
                         <option value="2">En 2 horas</option>
                         <option value="3">En 3 horas</option>
                         <option value="4">En 4 horas</option>
@@ -334,12 +336,23 @@
                         <option value="6">En 6 horas</option>
                         <option value="7">En 7 horas</option>
                     </select>
-                </div>   
+					<div id="programado">
+						<input type="date" id="input-programado" name="trip-start" value="2021-09-14" min="2021-09-14" max="2021-12-31" required>
+					</div>
+				</div>   
 			</form>    
 			<p style="text-align:right">
-				<br><button type="button" onclick="confirmarFecha();" class="btn btn-primary" >Acordar entrega</button>    
+				<br><button id="boton-rapido" type="button" onclick="confirmarFechaInmediato();" class="btn btn-primary" >Acordar entrega</button>
+				<br><button id="boton-programado" type="button" onclick="confirmarFechaProgramado();" class="btn btn-primary" >Acordar entrega</button>				
 			</p>
 		</div>
+		
+		
+		<!--
+		<div id = "comprobante">
+			
+		</div>
+		-->
 
     </main>
     <script src="js/formulario.js"></script>
@@ -353,8 +366,6 @@
             var SelectCiudades=document.getElementById('ciudad');
             var SelectCalle=document.getElementById('calle').value.split('');
             var SelectNum=document.getElementById('numero').value.split('');
-			
-			var output = SelectCalle.length;
 			
 			
             if(SelectCiudades.value==0 ||
@@ -407,19 +418,124 @@
 		
 		function confirmarPagoVisa(){
 		
-            document.getElementById('fechaEntrega').style.display = 'block';
+			const caracteresNumero = '0123456789'.split(''); // numeros, guion medio
+			const alfabeto = 'abcdefghijklmnñopqrstuvwxyz'.split('').concat('abcdefghijklmnñopqrstuvwxyz'.split('').map((c) => c.toUpperCase())); // Letras y espacios, pueden llevar acentos.
+			
+			const numVisa = document.getElementById("tarjeta").value.split('');
+			const nomyap = document.getElementById("nomyap").value.split('');
+			const vencimiento = document.getElementById("vencimiento").value.split('');
+			const cvc = document.getElementById("cvc").value;
+			
+			var mes = 0;
+			var year = 0;
+			
+			if ((numVisa.length != 16) || (parseInt(numVisa[0]) != 4) || !numVisa.every( num => caracteresNumero.includes(num)))
+			{
+				visa_error = "No es un número de Visa correcto";
+				alert(visa_error);
+			}
+			else
+			{
+				if(nomyap.length == 0 || !nomyap.every( letra => alfabeto.includes(letra)) )
+				{
+					alert("Ingrese Nombre y Apellido");
+				}
+				else{
+					if(vencimiento.length != 7 || !['/'].includes(vencimiento[2]) || !vencimiento.every( c => (caracteresNumero.includes(c) || ['/'].includes(c)) ) )
+					{
+						alert("Escribi bien el formato del vencimiento");
+					}
+					else{
+						//Formato MM/AAAA en numero
+						mes = vencimiento[0] + vencimiento[1];
+						year = vencimiento[3] + vencimiento[4] + vencimiento[5] + vencimiento[6];
+						
+						
+						if( parseInt(mes) > 0 && parseInt(mes) < 13 && parseInt(year) >= 2021 && parseInt(year) < 2040){
+							if(parseInt(year) == 2021 && parseInt(mes) < 10)
+							{
+								alert("Su tarjeta vencio este año.");
+							}
+							else
+							{
+								if( cvc>99 && cvc<1000)
+								{
+									alert("Pago exitoso.");
+									ocultar();
+									document.getElementById('titulo-entrega').style.display = 'block';
+									document.getElementById('fechaEntrega').style.display = 'block';
+								}
+								else
+								{
+									alert("Código de seguridad incorrecto");
+								}
+							}
+						}
+						else
+						{
+							alert("Tarjeta inválida.");
+						}
+					}
+					
+				}
+			}
 		}
 		
-		function confirmarFecha(){
+		function confirmarFechaInmediato()
+		{
             const entrega = document.getElementById("condicionEntrega").value;
             const rapido = document.getElementById("rapido");
+            const inputProgramado = document.getElementById("input-programado").value;
+			const programado = document.getElementById("programado");
+			const botonProgramado = document.getElementById("boton-programado");
+			const botonRapido = document.getElementById("boton-rapido");
 			
-			if(!entrega) //lo antes posible
+			//const finale = document.getElementById("comprobante");
+			
+			
+			if(entrega==0) //lo antes posible
 			{
+				botonProgramado.style.display = "none";
+				botonRapido.style.display = "block";
+				programado.style.display = "none";
 				rapido.style.display = "block";
+				if(rapido.value!=0)
+				{
+					alert("Felicitaciones, tu pedido llegará en "+rapido.value+" horas");
+					//ocultar();
+					//finale.style.display = "block";
+				}
 			}
 			else //elegir fecha
 			{
+				programado.style.display = "block";
+				botonProgramado.style.display = "block";
+				botonRapido.style.display = "none";
+			}
+		}
+		
+		function confirmarFechaProgramado()
+		{
+			const entrega = document.getElementById("condicionEntrega").value;
+            const inputProgramado = document.getElementById("input-programado").value;
+			const programado = document.getElementById("programado");
+			
+			const botonProgramado = document.getElementById("boton-programado");
+			const botonRapido = document.getElementById("boton-rapido");
+			
+			//const finale = document.getElementById("comprobante");
+			
+			if(entrega==1) //elegir fecha
+			{
+				alert("Felicitaciones, tu pedido llegará el "+inputProgramado);
+				//ocultar();
+				//finale.style.display = "block";
+			}
+			else //rapido
+			{
+				programado.style.display = "none";
+				botonProgramado.style.display = "none";
+				botonRapido.style.display = "block";
 			}
 			
 		}
@@ -440,9 +556,11 @@
 		
 		function ocultar(){
 			ocultarProductos();
+            document.getElementById('titulo-visa').style.display = 'none';
             document.getElementById('titulo-entrega').style.display =  'none';
             document.getElementById('titulo-efectivo').style.display = 'none';
             document.getElementById('rapido').style.display = 'none';
+            document.getElementById('programado').style.display = 'none';
             document.getElementById('formVisa').style.display = 'none';
             document.getElementById('containerPago').style.display = 'none';
             document.getElementById('formEfectivo').style.display = 'none';
@@ -480,10 +598,9 @@
 		function pagoVisa(){
             document.getElementById('containerPago').style.display = 'none';
             document.getElementById('formVisa').style.display = 'block';
+            document.getElementById('titulo-visa').style.display = 'block';
             document.getElementById('formEfectivo').style.display = 'none';
 		}
-		
-		
 		
     </script>
 	<script src="https://kit.fontawesome.com/2c36e9b7b1.js" crossorigin="anonymous"></script>

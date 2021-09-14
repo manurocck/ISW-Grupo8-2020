@@ -147,32 +147,15 @@ function mostrarProductos(){
 	
 }
 
-function formularioValido() {
+$( document ).ready(function() {
+    $('#vencimiento').bind('keyup','keydown', function(event) {
+    var inputLength = event.target.value.length;
+    if(inputLength === 2 || inputLength === 5){
+      var thisVal = event.target.value;
+      thisVal += '/';
+      $(event.target).val(thisVal);
+    }
+  })
+});
 
-	const calle = document.getElementById('calle').value;
-	const numero = document.getElementById('numero').value;
-	const ciudad = document.getElementById('ciudad').value;
-	
-	
-	//tengo que hacer funcionar esto de abajo
-	//var valCalle = calle.map( c => caracteresCalle.includes(c) ).every(c => c===true);
-	//var val2 = numero.map( c => caracteresNumero.includes(c) ).every(c => c===true);
-	//let val3 = ["1","2","3"].includes(ciudad); 
-	
-	
-	var val1 = true;
-	var val2 = true;
-	var val3 = true;
-	
-	//lo que sigue funciona
-	var confirmacion = [val1,val2,val3].every( c => c===true);
-	
-	if( confirmacion )
-	{
-		mostrarProductos();
-		return;
-	}
-	
-	return;
-};
 
