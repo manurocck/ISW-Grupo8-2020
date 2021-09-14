@@ -191,7 +191,7 @@
 			<div class="formulario__grupo" id="grupo__ciudad">
                 <label for="ciudad" class="formulario__label">Ciudad</label>
                 <div class="formulario__grupo-input">
-                    <select class="formulario__input" name="ciudad" id="ciudad" placeholder ="ciudad">
+                    <select class="formulario__input" name="ciudad" id="ciudad" placeholder ="ciudad" required>
                         <option value="0" selected>Seleccione la Ciudad</option>
                         <option value="1">Córdoba</option>
                         <option value="2">Carlos Paz</option>
@@ -215,7 +215,7 @@
 				<p><i class="fas fa-exclamation-triangle"></i> <b>Error:</b> Por favor rellena el formulario correctamente. </p>
 			</div>
             <div class="formulario__grupo formulario__grupo-btn-enviar"></div>
-                <button type="button"  class="formulario__btn" >Continuar</button>    
+                <button type="button" onclick="validar();" class="formulario__btn" >Continuar</button>    
                 <button type="button"  onclick="volver();" class="btn btn-primary" >Volver</button>
             </div>
         </form>    
@@ -298,6 +298,15 @@
     </main>
     <script src="js/formulario.js"></script>
     <script>
+        function validar(){
+            var SelectCiudades=document.getElementById('ciudad');
+            if(SelectCiudades.value==0 ||
+                SelectCiudades.value=="")
+                {
+                    alert("Selecciona una ciudad para continuar");
+                    SelectCiudades.focus();
+                }
+        }
 		function continuar(){
 		
 			mostrarProductos();
