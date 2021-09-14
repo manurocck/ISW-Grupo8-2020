@@ -219,7 +219,7 @@
 			</div>
             <div class="formulario__grupo formulario__grupo-btn-enviar"></div>
                 <button type="button" onclick="continuar();" class="formulario__btn" >Continuar</button>    
-                <button type="button"  onclick="volver();" class="btn btn-primary" >Volver</button>
+                <button type="button"  onclick="volver();" class="formulario__btn" >Volver</button>
             </div>
         </form>    
         <div id="container">
@@ -334,23 +334,24 @@
             if(SelectCiudades.value==0 ||
                 SelectCiudades.value=="")
                 {
-                    alert("Selecciona una ciudad para continuar");
+                    //alert("Selecciona una ciudad para continuar");
                     SelectCiudades.focus();
 				}else{
 					if(SelectCalle.length == 0 || !SelectCalle.every( letra => caracteresCalle.includes(letra) ))
 					{
-						alert("Ingrese una calle válida");
+						//alert("Ingrese una calle válida");
 						SelectCalle.focus();
 					}
 					else{
 						if(SelectNum.length == 0 || !SelectNum.every( letra => caracteresNumero.includes(letra) ))
 						{
-							alert("Ingrese un numero válido (Planta Baja como 0)");
+							//alert("Ingrese un numero válido (Planta Baja como 0)");
 							SelectNum.focus();
 						}
 						else
 						{
 							mostrarProductos();
+							
 						}
 					}
 				}
@@ -363,7 +364,7 @@
 			
 			const value = parseInt(input.value);
             if (value < parseFloat(miTotal.textContent) ) {
-                alert('Tu importe debe ser mayor a ' + parseFloat(miTotal.textContent));
+                alert('Tu importe debe ser mayor o igual a ' + parseFloat(miTotal.textContent));
             }
 			else
 			{
