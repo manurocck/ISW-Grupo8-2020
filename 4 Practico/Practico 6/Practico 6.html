@@ -122,7 +122,7 @@
              * Calcula el precio total teniendo en cuenta los productos repetidos
              */
             function calcularTotal() {
-                // Limpiamos precio anterior
+                //Limpiamos precio anterior
                 total = 0;
                 // Recorremos el array del carrito
                 carrito.forEach((item) => {
@@ -134,7 +134,7 @@
                 DOMtotal.textContent = total.toFixed(2);
             }
             /**
-             * Varia el carrito y vuelve a dibujarlo
+             *Varia el carrito y vuelve a dibujarlo
              */
             function vaciarCarrito() {
                 // Limpiamos los productos guardados
@@ -145,7 +145,7 @@
             }
             // Eventos
             DOMbotonVaciar.addEventListener('click', vaciarCarrito);    
-            // Inicio
+            //Inicio
             renderizarProductos();
         }         
     </script>
@@ -210,6 +210,16 @@
                 </div>
                 <p class="formulario__input-error">El usuario tiene que ser de 4 a 16 dígitos y solo puede contener numeros, letras y guion bajo.</p>
             </div>
+<<<<<<< Updated upstream
+=======
+            <p>
+                <button type="button" onclick="mostrarProductos();" class="btn btn-primary" >Continuar</button>    
+                <button type="button" onclick="mostrarProductos();" class="btn btn-primary" >Volver</button>
+            </p>
+
+        </form>        
+    </main>
+>>>>>>> Stashed changes
 
             <div class="formulario__mensaje" id="formulario__mensaje">
 				<p><i class="fas fa-exclamation-triangle"></i> <b>Error:</b> Por favor rellena el formulario correctamente. </p>
