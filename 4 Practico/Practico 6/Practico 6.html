@@ -220,7 +220,7 @@
 			</div>
             <div class="formulario__grupo formulario__grupo-btn-enviar"></div>
                 <button type="button" onclick="continuar();" class="formulario__btn" >Continuar</button>    
-                <button type="button"  onclick="volver();" class="formulario__btn" >Volver</button>
+                <button type="button"  onclick="volverAlPrincipio();" class="formulario__btn" >Volver</button>
             </div>
         </form>
 		<h1 id="titulo-carrito">Seleccione sus productos</h1>
@@ -236,7 +236,7 @@
                     <hr>
                     <!-- Precio total -->
                     <p class="text-right">Total: <span id="total"></span>$</p>
-                    <button id="boton-vaciar"    onclick="volver();"   class="btn btn-danger" >Cancelar</button>
+                    <button id="boton-vaciar"    onclick="volverAlPrincipio();"   class="btn btn-danger" >Cancelar</button>
                     <button id="boton-Confirmar" onclick="confirmarCarrito();" class="btn btn-danger">Confirmar</button>
                 </aside>
             </div>
@@ -245,8 +245,8 @@
 		<!-- PAGO EN EFECTIVO O VISA -->
 		
 		<div id="containerPago">
-			<center><h2>ELIJA EL MÉTODO DE PAGO</h2></center>
-			<hr>
+			<center><h1>Seleccione el método de pago</h1></center>
+			<i><h3 align="right">Debe abonar: $<span id="totalPago"></span></h3></i>
 			<div class="row" id="botonesPago">
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button id="boton-EFECTIVO"  class="btn btn-danger" onclick="pagoEfectivo();" >EFECTIVO</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -298,29 +298,54 @@
 				</p>
 			</form>    
 		</div>
-
+		<h1 id="titulo-efectivo">Pago en Efectivo</h1>
 		<div class="form-container" id="formEfectivo">
 			<form action="" class="formularioEfectivo" id="Efectivo">
 				<!-- Grupo: Tarjeta -->
                 <!-- Grupo: Número -->
                 <div class="formulario__grupo" id="grupo__importe">
-                    <label for="importe" class="formulario__label">¿Con cuanto pagas?</label>
+                    <label for="importe" class="formulario__label">Ingrese el monto con el que abonará</label>
                     <div class="formulario__grupo-input">
                         <input type="text" size="50%" onkeypress="return onlyNumberKey(event)" class="formulario__input" name="importe" id="importe" placeholder="Importe">
                         <i class="formulario__validacion-estado fas fa-times-circle"></i>
                     </div>
                     <p class="formulario__input-error">Debe Ingresar un valor numerico.</p>
                 </div>    
-				<p style="text-align:right">
-					<br><button type="button" onclick="confirmarPago();" class="btn btn-primary" >CONFIRMAR PAGO</button>    
-				</p>
 			</form>    
+			<p style="text-align:right">
+				<br><button type="button" onclick="confirmarPagoEfectivo();" class="btn btn-primary" >Confirmar pago en efectivo</button>    
+			</p>
+		</div>
+		<h1 id="titulo-entrega">Acordar entrega</h1>
+		<div class="form-container" id="fechaEntrega">
+			<form action="" class="formularioEntrega">
+                <div class="formulario__grupo" id="grupo__fechaEntrega">
+                    <label for="Fecha entrega" class="formulario__label">Elija la fecha de entrega</label>
+                    <select class="formulario__input" name="Entrega" id="condicionEntrega" placeholder ="Entrega" required>
+                        <option value="0" selected>Lo antes posible</option>
+                        <option value="1">Fecha y hora de recepción</option>
+                    </select>
+					<select class="formulario__input" name="rapido" id="rapido" placeholder ="En cuanto tiempo?" required>
+                        <option value="1" selected>En 1 hora</option>
+                        <option value="2">En 2 horas</option>
+                        <option value="3">En 3 horas</option>
+                        <option value="4">En 4 horas</option>
+                        <option value="5">En 5 horas</option>
+                        <option value="6">En 6 horas</option>
+                        <option value="7">En 7 horas</option>
+                    </select>
+                </div>   
+			</form>    
+			<p style="text-align:right">
+				<br><button type="button" onclick="confirmarFecha();" class="btn btn-primary" >Acordar entrega</button>    
+			</p>
 		</div>
 
     </main>
     <script src="js/formulario.js"></script>
     <script>
-        function continuar(){	
+        function continuar()
+		{	
 			const caracteresCalle = 'abcdefghijklmnñopqrstuvwxyz'.split('').concat('abcdefghijklmnñopqrstuvwxyz'.split('').map((c) => c.toUpperCase())); // Letras y espacios, pueden llevar acentos.
 			const caracteresNumero = '0123456789'.split(''); // numeros, guion medio
 
@@ -330,7 +355,6 @@
             var SelectNum=document.getElementById('numero').value.split('');
 			
 			var output = SelectCalle.length;
-			console.log(output);
 			
 			
             if(SelectCiudades.value==0 ||
@@ -360,18 +384,44 @@
         }
 		
 		
-        function confirmarPago(){
+        function confirmarPagoEfectivo(){
 			const input = document.getElementById('importe');
 			const miTotal = document.getElementById('total');
 			
+			
 			const value = parseInt(input.value);
-            if (value < parseFloat(miTotal.textContent) ) {
+			
+            if (value < parseFloat(miTotal.textContent)) {
                 alert('Tu importe debe ser mayor o igual a ' + parseFloat(miTotal.textContent));
             }
 			else
 			{
-				alert("Pago Confirmado");
+				if(input.value.split('').length != 0){
+					ocultar();
+					document.getElementById('fechaEntrega').style.display = 'block';
+					document.getElementById('titulo-entrega').style.display = 'block';
+				}
 			}
+			
+		}
+		
+		function confirmarPagoVisa(){
+		
+            document.getElementById('fechaEntrega').style.display = 'block';
+		}
+		
+		function confirmarFecha(){
+            const entrega = document.getElementById("condicionEntrega").value;
+            const rapido = document.getElementById("rapido");
+			
+			if(!entrega) //lo antes posible
+			{
+				rapido.style.display = "block";
+			}
+			else //elegir fecha
+			{
+			}
+			
 		}
 		
 		function onlyNumberKey(evt) { 
@@ -382,13 +432,21 @@
 			return true;
 		}
 		
-		function volver(){
-			ocultarProductos();
-            document.getElementById('formVisa').style.display = 'none';
-            document.getElementById('containerPago').style.display = 'none';
-            document.getElementById('Efectivo').style.display = 'none';
+		function volverAlPrincipio(){
+			ocultar();
             document.getElementById('formulario').style.display = 'block';
             document.getElementById('titulo-formulario').style.display = 'block';
+		}
+		
+		function ocultar(){
+			ocultarProductos();
+            document.getElementById('titulo-entrega').style.display =  'none';
+            document.getElementById('titulo-efectivo').style.display = 'none';
+            document.getElementById('rapido').style.display = 'none';
+            document.getElementById('formVisa').style.display = 'none';
+            document.getElementById('containerPago').style.display = 'none';
+            document.getElementById('formEfectivo').style.display = 'none';
+            document.getElementById('fechaEntrega').style.display = 'none';
 		}
         function ocultarProductos(){
             document.getElementById('titulo-carrito').style.display = 'none';
@@ -401,10 +459,14 @@
 		
         function confirmarCarrito(){
 			const miTotal = parseFloat(document.getElementById('total').textContent);
+			const DOMtotalPago = document.getElementById('totalPago');
+			const DOMtotal = document.getElementById('total');
+		
 		
 			if(miTotal > 0){
 				ocultarProductos();
-				document.getElementById('containerPago').style.display = 'block';			
+				document.getElementById('containerPago').style.display = 'block';
+				DOMtotalPago.textContent = DOMtotal.textContent;
 			}
 			else{
 				alert("Debe agregar al menos un producto al carrito");
@@ -412,8 +474,8 @@
         }
 		function pagoEfectivo(){
             document.getElementById('containerPago').style.display = 'none';
+            document.getElementById('titulo-efectivo').style.display = 'block';
             document.getElementById('formEfectivo').style.display = 'block';
-            document.getElementById('formVisa').style.display = 'none';
 		}
 		function pagoVisa(){
             document.getElementById('containerPago').style.display = 'none';

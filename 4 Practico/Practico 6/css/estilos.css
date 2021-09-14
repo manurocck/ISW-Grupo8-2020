@@ -18,6 +18,21 @@ main {
 	display:none;
 }
 
+#titulo-entrega{
+	display:none;
+}
+
+#titulo-efectivo{
+	display:none;
+}
+
+#fechaEntrega{
+	display:none;
+}
+#rapido{
+	display:none;
+}
+
 .formulario {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
