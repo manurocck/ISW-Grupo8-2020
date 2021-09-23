@@ -24,6 +24,12 @@ main {
 #titulo-entrega{
 	display:none;
 }
+#titulo-comprobante{
+	display:none;
+}
+#subtitulo-comprobante{
+	display:none;
+}
 
 #titulo-efectivo{
 	display:none;
@@ -39,6 +45,9 @@ main {
 	display:none;
 }
 #programado{
+	display:none;
+}
+#comprobante{
 	display:none;
 }
 
