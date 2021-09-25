@@ -1,55 +1,16 @@
-* {
-	box-sizing: border-box;
+
+#titulo-carrito, #titulo-visa, #titulo-entrega,
+#titulo-comprobante, #subtitulo-comprobante, 
+#titulo-efectivo, #fechaEntrega, #rapido,
+#boton-programado, #programado, #comprobante, 
+#container, #containerPago, #formVisa, #formEfectivo {
+	display: none;
 }
 
-body {
-	font-family: 'Roboto', sans-serif;
-	background: #E5E5E5;
-}
-
-main {
-	max-width: 800px;
-	width: 90%;
+#botonesPago {
 	margin: auto;
-	padding: 40px;
 }
-
-#titulo-carrito{
-	display:none;
-}
-#titulo-visa{
-	display:none;
-}
-
-#titulo-entrega{
-	display:none;
-}
-#titulo-comprobante{
-	display:none;
-}
-#subtitulo-comprobante{
-	display:none;
-}
-
-#titulo-efectivo{
-	display:none;
-}
-
-#fechaEntrega{
-	display:none;
-}
-#rapido{
-	display:none;
-}
-#boton-programado{
-	display:none;
-}
-#programado{
-	display:none;
-}
-#comprobante{
-	display:none;
-}
+		
 
 .formulario {
 	display: grid;

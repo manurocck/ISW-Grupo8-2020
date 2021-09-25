@@ -1,0 +1,8 @@
+Para HTML: 
+https://kinsta.com/blog/html-best-practices/
+
+Para Javascript:
+https://deepsource.io/blog/javascript-code-quality-best-practices/
+
+Para CSS:
+https://medium.com/before-semicolon/50-css-best-practices-guidelines-to-write-better-css-c60807e9eee2
