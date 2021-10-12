@@ -177,6 +177,12 @@ function botonConfirmarFechaProgramado() {
 	botonRapido.style.display = "block";
 	}		
 }
+
+function insertarComprobante() {
+	document.getElementById('comprobante').style.display = 'block';
+	
+}
+
 function botonPagoEfectivo() {
 	document.getElementById('containerPago').style.display = 'none';
 	document.getElementById('titulo-efectivo').style.display = 'block';
@@ -217,8 +223,7 @@ function ocultarProductos(){
 	document.getElementById('container').style.display = 'none';
 }
 function ocultarFormulario(){
-	document.getElementById('titulo-formulario').style.display = 'none';
-	document.getElementById('formulario').style.display = 'none';
+	document.getElementById('formulario-personal').style.display = 'none';
 }
 function confirmarCarrito(){
 	const miTotal = parseFloat(document.getElementById('total').textContent);

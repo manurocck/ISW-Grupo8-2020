@@ -7,207 +7,68 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/formulario.css">
-    <script>
-        window.onload = function () {
-            // Variables
-            const baseDeDatos = [
-                    {id: 1,nombre: 'Patata',precio: 1,imagen: 'imagenes/patatas.jpg'},
-                    {id: 2,nombre: 'Cebolla',precio: 1.2, imagen: 'imagenes/cebolla.jpg'},
-                    {id: 3,nombre: 'Calabacin',precio: 2.1,imagen: 'imagenes/calabacin.jpg'},
-                    {id: 4,nombre: 'Fresas',precio: 0.6,imagen: 'imagenes/fresas.jpg'},
-                    {id: 5,nombre: 'Zapallo',precio: 5.5,imagen: 'imagenes/zapallo.jpg'},
-                    {id: 6,nombre: 'Bananas',precio: 2.0,imagen: 'imagenes/bananas.jpg'}
-            ];
-
-            let carrito = [];
-            let total = 0;
-            const DOMitems       = document.querySelector('#items');
-            const DOMcarrito     = document.querySelector('#carrito');
-            const DOMtotal       = document.querySelector('#total');
-            const DOMbotonVaciar = document.querySelector('#boton-vaciar');
-            // Funciones
-            /**
-             * Dibuja todos los productos a partir de la base de datos. No confundir con el carrito
-             */
-            function renderizarProductos() {
-                baseDeDatos.forEach((info) => {
-                        // Estructura
-                        const miNodo = document.createElement('div');
-                        miNodo.classList.add('card', 'col-sm-4');
-                        // Body
-                        const miNodoCardBody = document.createElement('div');
-                        miNodoCardBody.classList.add('card-body');
-                        // Titulo
-                        const miNodoTitle = document.createElement('h5');
-                        miNodoTitle.classList.add('card-title');
-                        miNodoTitle.textContent = info.nombre;
-                        // Imagen
-                        const miNodoImagen = document.createElement('img');
-                        miNodoImagen.classList.add('img-fluid');
-                        miNodoImagen.setAttribute('src', info.imagen);
-                        // Precio
-                        const miNodoPrecio = document.createElement('p');
-                        miNodoPrecio.classList.add('card-text');
-                        miNodoPrecio.textContent = info.precio + '$';
-                        // Boton 
-                        const miNodoBoton = document.createElement('button');
-                        miNodoBoton.classList.add('btn', 'btn-primary');
-                        miNodoBoton.textContent = '+';
-                        miNodoBoton.setAttribute('marcador', info.id);
-                        miNodoBoton.addEventListener('click', anyadirProductoAlCarrito);
-                        // Insertamos
-                        miNodoCardBody.appendChild(miNodoImagen);
-                        miNodoCardBody.appendChild(miNodoTitle);
-                        miNodoCardBody.appendChild(miNodoPrecio);
-                        miNodoCardBody.appendChild(miNodoBoton);
-                        miNodo.appendChild(miNodoCardBody);
-                        DOMitems.appendChild(miNodo);
-                });
-            }
-            /**
-            * Evento para añadir un producto al carrito de la compra
-            */
-            function anyadirProductoAlCarrito(evento) {
-                // Anyadimos el Nodo a nuestro carrito
-                carrito.push(evento.target.getAttribute('marcador'))
-                // Calculo el total
-                calcularTotal();
-                // Actualizamos el carrito 
-                renderizarCarrito();
-            }
-
-            /**
-            * Dibuja todos los productos guardados en el carrito
-            */
-            function renderizarCarrito() {
-                // Vaciamos todo el html
-                DOMcarrito.textContent = '';
-                // Quitamos los duplicados
-                const carritoSinDuplicados = [...new Set(carrito)];
-                // Generamos los Nodos a partir de carrito
-                carritoSinDuplicados.forEach((item) => {
-                    // Obtenemos el item que necesitamos de la variable base de datos
-                    const miItem = baseDeDatos.filter((itemBaseDatos) => {return itemBaseDatos.id === parseInt(item);});              // ¿Coincide las id? Solo puede existir un caso
-                    // Cuenta el número de veces que se repite el producto
-                    const numeroUnidadesItem = carrito.reduce((total, itemId) => {return itemId === item ? total += 1 : total;}, 0); // ¿Coincide las id? Incremento el contador, en caso contrario no mantengo
-                    // Creamos el nodo del item del carrito
-                    const miNodo = document.createElement('li');
-                    miNodo.classList.add('list-group-item', 'text-right', 'mx-2');
-                    miNodo.textContent = `${numeroUnidadesItem} x ${miItem[0].nombre} - ${miItem[0].precio}$`;
-                    // Boton de borrar
-                    const miBoton = document.createElement('button');
-                    miBoton.classList.add('btn', 'btn-danger', 'mx-5');
-                    miBoton.textContent = 'X';
-                    miBoton.style.marginLeft = '1rem';
-                    miBoton.dataset.item = item;
-                    miBoton.addEventListener('click', borrarItemCarrito);
-                    // Mezclamos nodos
-                    miNodo.appendChild(miBoton);
-                    DOMcarrito.appendChild(miNodo);
-                });
-            }
-            /**
-            * Evento para borrar un elemento del carrito
-            */
-            function borrarItemCarrito(evento) {
-                // Obtenemos el producto ID que hay en el boton pulsado
-                const id = evento.target.dataset.item;
-                // Borramos todos los productos
-                carrito = carrito.filter((carritoId) => {return carritoId !== id;});
-                // volvemos a renderizar
-                renderizarCarrito();
-                // Calculamos de nuevo el precio
-                calcularTotal();
-            }
-            /**
-             * Calcula el precio total teniendo en cuenta los productos repetidos
-             */
-            function calcularTotal() {
-                // Limpiamos precio anterior
-                total = 0;
-                // Recorremos el array del carrito
-                carrito.forEach((item) => {
-                    // De cada elemento obtenemos su precio
-                    const miItem = baseDeDatos.filter((itemBaseDatos) => {return itemBaseDatos.id === parseInt(item);});
-                    total = total + miItem[0].precio;
-                 });
-                // Renderizamos el precio en el HTML
-                DOMtotal.textContent = total.toFixed(2);
-            }
-            /**
-             * Varia el carrito y vuelve a dibujarlo
-             */
-            function vaciarCarrito() {
-                // Limpiamos los productos guardados
-                carrito = [];
-                // Renderizamos los cambios
-                renderizarCarrito();
-                calcularTotal();
-            }
-            // Eventos
-            DOMbotonVaciar.addEventListener('click', vaciarCarrito);    
-            // Inicio
-            renderizarProductos();
-        }         
-    </script>
-
 </head>
 <body>
     <main class="form-container" >
-		<h1 id="titulo-formulario">Ingrese dirección de envío</h1>
-        <form action="" class="formulario" id="formulario">
-			<!-- Grupo: Nombre -->
-			<div class="formulario__grupo" id="grupo__calle">
-				<label for="calle" class="formulario__label">Calle</label>
-				<div class="formulario__grupo-input">
-					<input type="text" class="formulario__input" name="calle" id="calle" placeholder="calle">
-					<i class="formulario__validacion-estado fas fa-times-circle"></i>
+	<!-- Ingreso de datos personales -->
+		<div id="formulario-personal">
+			<h1 id="titulo-formulario">Ingrese dirección de envío</h1>
+			<form action="" class="formulario" id="formulario">
+				<!-- Grupo: Nombre -->
+				<div class="formulario__grupo" id="grupo__calle">
+					<label for="calle" class="formulario__label">Calle</label>
+					<div class="formulario__grupo-input">
+						<input type="text" class="formulario__input" name="calle" id="calle" placeholder="calle">
+						<i class="formulario__validacion-estado fas fa-times-circle"></i>
+					</div>
+					<p class="formulario__input-error">Debe indicar la calle.</p>
 				</div>
-				<p class="formulario__input-error">Debe indicar la calle.</p>
-			</div>
-            <!-- Grupo: Número -->
-			<div class="formulario__grupo" id="grupo__numero">
-				<label for="numero" class="formulario__label">Número</label>
-				<div class="formulario__grupo-input">
-					<input type="tel" size="50%" onkeypress="return onlyNumberKey(event)" class="formulario__input" name="numero" id="numero" placeholder="numero">
-					<i class="formulario__validacion-estado fas fa-times-circle"></i>
+				<!-- Grupo: Número -->
+				<div class="formulario__grupo" id="grupo__numero">
+					<label for="numero" class="formulario__label">Número</label>
+					<div class="formulario__grupo-input">
+						<input type="tel" size="50%" onkeypress="return onlyNumberKey(event)" class="formulario__input" name="numero" id="numero" placeholder="numero">
+						<i class="formulario__validacion-estado fas fa-times-circle"></i>
+					</div>
+					<p class="formulario__input-error">Debe indicar un numero o guion medio.</p>
 				</div>
-				<p class="formulario__input-error">Debe indicar un numero o guion medio.</p>
-			</div>
-            <!-- Grupo: ciudad -->
-			<div class="formulario__grupo" id="grupo__ciudad">
-                <label for="ciudad" class="formulario__label">Ciudad</label>
-                <div class="formulario__grupo-input">
-                    <select class="formulario__input" name="ciudad" id="ciudad" placeholder ="ciudad" required>
-                        <option value="0" selected>Seleccione la Ciudad</option>
-                        <option name="Córdoba" value="1">Córdoba</option>
-                        <option name="Carlos Paz" value="2">Carlos Paz</option>
-                        <option name="Rio Primero" value="3">Rio Primero</option>
-                    </select>
-                    <i class="formulario__validacion-estado fas fa-times-circle"></i>
-                </div>
-                <p class="formulario__input-error">Seleccione la ciudad.</p>
-			</div>
-            <!-- Grupo: referencia -->
-            <div class="formulario__grupo" id="grupo__referencia">
-                <label for="referencia" class="formulario__label">Referencia</label>
-                <div class="formulario__grupo-input">
-                    <input type="text" class="formulario__input" name="referencia" id="referencia" placeholder="Referencia">
-                    <i class="formulario__validacion-estado fas fa-times-circle"></i>
-                </div>
-                <p class="formulario__input-error">El usuario tiene que ser de 4 a 16 dígitos y solo puede contener numeros, letras y guion bajo.</p>
-            </div>
+				<!-- Grupo: ciudad -->
+				<div class="formulario__grupo" id="grupo__ciudad">
+					<label for="ciudad" class="formulario__label">Ciudad</label>
+					<div class="formulario__grupo-input">
+						<select class="formulario__input" name="ciudad" id="ciudad" placeholder ="ciudad" required>
+							<option value="0" selected>Seleccione la Ciudad</option>
+							<option name="Córdoba" value="1">Córdoba</option>
+							<option name="Carlos Paz" value="2">Carlos Paz</option>
+							<option name="Rio Primero" value="3">Rio Primero</option>
+						</select>
+						<i class="formulario__validacion-estado fas fa-times-circle"></i>
+					</div>
+					<p class="formulario__input-error">Seleccione la ciudad.</p>
+				</div>
+				<!-- Grupo: referencia -->
+				<div class="formulario__grupo" id="grupo__referencia">
+					<label for="referencia" class="formulario__label">Referencia</label>
+					<div class="formulario__grupo-input">
+						<input type="text" class="formulario__input" name="referencia" id="referencia" placeholder="Referencia">
+						<i class="formulario__validacion-estado fas fa-times-circle"></i>
+					</div>
+					<p class="formulario__input-error">El usuario tiene que ser de 4 a 16 dígitos y solo puede contener numeros, letras y guion bajo.</p>
+				</div>
 
-            <div class="formulario__mensaje" id="formulario__mensaje">
-				<p><i class="fas fa-exclamation-triangle"></i> <b>Error:</b> Por favor rellena el formulario correctamente. </p>
-			</div>
-            <div class="formulario__grupo formulario__grupo-btn-enviar"></div>
-                <button type="button" onclick="botonContinuar();" class="formulario__btn" >Continuar</button>    
-                <button type="button"  onclick="volverAlPrincipio();" class="formulario__btn" >Volver</button>
-            </div>
-        </form>
-		<h1 id="titulo-carrito">Seleccione sus productos</h1>
-        <div id="container">
+				<div class="formulario__mensaje" id="formulario__mensaje">
+					<p><i class="fas fa-exclamation-triangle"></i> <b>Error:</b> Por favor rellena el formulario correctamente. </p>
+				</div>
+				<div class="formulario__grupo formulario__grupo-btn-enviar">
+					<button type="button" onclick="botonContinuar();" class="formulario__btn" >Continuar</button>    
+					<button type="button"  onclick="volverAlPrincipio();" class="formulario__btn" >Volver</button>
+				</div>
+			</form>
+		</div>
+    
+	<!-- Selección de productos -->
+		<div id="container">
+			<h1 id="titulo-carrito">Seleccione sus productos</h1>
             <div class="row">
                 <!-- Elementos generados a partir del JSON -->
                 <main id="items" class="col-sm-8 row"></main>
@@ -225,11 +86,10 @@
             </div>
         </div>
 		
-		<!-- PAGO EN EFECTIVO O VISA -->
-		
+	<!-- Selección de forma de pago -->
 		<div id="containerPago">
 			<center><h1>Seleccione el método de pago</h1></center>
-			<i><h3 align="right">Debe abonar: $<span id="totalPago"></span></h3></i>
+			<h2 id="abonar" align="right">Deberá abonar: $<span id="totalPago"></span></h2>
 			<div class="row" id="botonesPago">
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button id="boton-EFECTIVO"  class="btn btn-danger" onclick="botonPagoEfectivo();" >EFECTIVO</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -237,9 +97,9 @@
 			</div>
         </div>
 		
-		<!-- FORMULARIO TARJETA VISA -->	
-		<h1 id="titulo-visa">Ingrese datos de su tarjeta VISA</h1>
+	<!-- Formulario de pago con tarjeta -->	
 		<div class="form-container" id="formVisa">
+			<h1 id="titulo-visa">Ingrese datos de su tarjeta VISA</h1>
 			<form action="" class="formularioTJ" id="Tarjeta">
 				<!-- Grupo: Tarjeta -->
 				<div class="formulario__grupo" id="grupo_n_tarjeta">
@@ -282,8 +142,10 @@
 				</p>
 			</form>    
 		</div>
-		<h1 id="titulo-efectivo">Pago en Efectivo</h1>
+		
+	<!-- Formulario de pago en efectivo -->	
 		<div class="form-container" id="formEfectivo">
+			<h1 id="titulo-efectivo">Pago en Efectivo</h1>
 			<form action="" class="formularioEfectivo" id="Efectivo">
 				<!-- Grupo: Tarjeta -->
                 <!-- Grupo: Número -->
@@ -300,8 +162,10 @@
 				<br><button type="button" onclick="botonConfirmarPagoEfectivo();" class="btn btn-primary" >Confirmar pago en efectivo</button>    
 			</p>
 		</div>
-		<h1 id="titulo-entrega">Acordar entrega</h1>
+		
+	<!-- Selección de fecha de entrega -->	
 		<div class="form-container" id="fechaEntrega">
+			<h1 id="titulo-entrega">Acordar entrega</h1>
 			<form action="" class="formularioEntrega">
                 <div class="formulario__grupo" id="grupo__fechaEntrega">
                     <label for="Fecha entrega" class="formulario__label">Elija la fecha de entrega</label>
@@ -329,9 +193,10 @@
 				<br><button id="boton-programado" type="button" onclick="botonConfirmarFechaProgramado();" class="btn btn-primary" >Acordar entrega</button>				
 			</p>
 		</div>
-		
-		<h1 id="titulo-comprobante">Comprobante de compra</h1>
+	
+	<!-- Comprobante y confirmación -->	
 		<div id = "comprobante">
+			<h1 id="titulo-comprobante">Comprobante de compra</h1>
 			<h3 id="subtitulo-comprobante"> Dirección de entrega </h3>
 			<span id="comprobante-formulario"></span>
 		</div>
@@ -339,6 +204,7 @@
     </main>
     <script src="js/validaciones.js"></script>
     <script src="js/formulario.js"></script>
+    <script src="js/onload.js"></script>
 	<script src="https://kit.fontawesome.com/2c36e9b7b1.js" crossorigin="anonymous"></script>
 </body>
 </html>
